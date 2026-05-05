@@ -1,28 +1,34 @@
-const version = '0.0.4';
+const version = '0.0.5';
 
 
 void main(List<String> arguments) {
 
-    if (arguments.isEmpty) {
-    // Sem argumentos
+    if (arguments.isEmpty || arguments.first == 'help') {
+    // Se não tiver argumento OU for "help"
 
-        print('Hello, Dart!');
-    // Mensagem padrão
+        printUsage();
+    // Mostra instruções de uso
 
     } else if (arguments.first == 'version') {
-    // Se for comando version
+    // Se for "version"
 
         print('Dartpedia CLI version $version');
-    // Mostra versão
+    // Exibe versão
+
+    } else {
+    // Qualquer outro comando
+
+        printUsage();
+    // Mostra ajuda (fallback)
 
     }
-
 }
 
 void printUsage() {
-// Função criada para mostrar instruções de uso
+// Função de ajuda
 
-  print("The following commands are valid: 'help', 'version', 'search <ARTICLE-TITLE>'");
-// Lista os comandos disponíveis para o usuário
+    print(
+    "The following commends are valid: 'help', 'version', 'search >ARTICLE-TITLE>'");
+// Exibe comandos válidos
 
 }
