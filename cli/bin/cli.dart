@@ -1,34 +1,40 @@
-const version = '0.0.5';
+const version = '0.0.6';
 
 
 void main(List<String> arguments) {
 
-    if (arguments.isEmpty || arguments.first == 'help') {
-    // Se não tiver argumento OU for "help"
+  if (arguments.isEmpty || arguments.first == 'help') {
+  // Sem argumentos ou comando help
 
-        printUsage();
-    // Mostra instruções de uso
+    printUsage();
+  // Mostra ajuda
 
-    } else if (arguments.first == 'version') {
-    // Se for "version"
+  } else if (arguments.first == 'version') {
+  // Se for version
 
-        print('Dartpedia CLI version $version');
-    // Exibe versão
+    print('Dartpedia CLI version $version');
+  // Exibe versão
 
-    } else {
-    // Qualquer outro comando
+  } else if (arguments.first == 'search') {
+  // Se for comando search
 
-        printUsage();
-    // Mostra ajuda (fallback)
+    print('Search command recognized!');
+  // Apenas reconhece o comando (placeholder)
 
-    }
+  } else {
+
+
+    printUsage();
+
+
+  }
 }
 
 void printUsage() {
-// Função de ajuda
 
-    print(
-    "The following commends are valid: 'help', 'version', 'search >ARTICLE-TITLE>'");
-// Exibe comandos válidos
+  print(
+    "The following commands are valid: 'help', 'version', 'search <ARTICLE-TITLE>'"
+  );
+// Lista comandos disponíveis
 
 }
