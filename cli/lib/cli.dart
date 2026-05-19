@@ -1,15 +1,66 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:command_runner/command_runner.dart';
 
-const String version = '0.0.8';
-/// FUNÇÃO PRINCIPAL
-/// Agora o CommandRunner gerencia todos os comandos.
-/// O main é async para aguardar operações assíncronas.
+const version = '0.0.8';
+
 Future<void> main(List<String> arguments) async {
-  // Cria o runner
-  final runner = CommandRunner();
+  if (arguments.isEmpty || arguments.first == 'help') {
+    printUsage();
+  } else if (arguments.first == 'version') {
+    print('Dartpedia CLI version $version');
+  } else if (arguments.first == 'search') {
+    final inputArgs = arguments.length > 1 ? arguments.sublist(1) : null;
+    await searchWikipedia(inputArgs);
+  } else {
+    printUsage();
+  }
+}
 
-  // Executa os comandos recebidos pelo terminal
-  await runner.run(arguments);
+void searchWikipedia(List<String>? arguments) async {
+  final String articleTitle;
+
+  if (arguments == null || arguments.isEmpty) {
+    print('Please provide an article title.');
+    final inputFromStdin = stdin.readLineSync(); 
+    
+    if (inputFromStdin == null || inputFromStdin.isEmpty) {
+      print('No article title provided. Exiting.');
+      return;
+    }
+    articleTitle = inputFromStdin;
+  } else {
+    
+    articleTitle = arguments.join(' ');
+  }
+
+  print('Looking up articles about "$articleTitle". Please wait.');
+
+
+  var articleContent = await getWikipediaArticle(articleTitle);
+  
+
+  print(articleContent);
+}
+
+void printUsage() {
+  print(
+    "The following commands are valid: 'help', 'version', 'search <ARTICLE-TITLE>'",
+  );
+}
+
+Future<String> getWikipediaArticle(String articleTitle) async {
+  final url = Uri.https(
+    'en.wikipedia.org',
+    '/api/rest_v1/page/summary/$articleTitle',
+  );
+
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    return response.body;
+  }
+
+  return 'Error: Failed to fetch article "$articleTitle". '
+      'Status code: ${response.statusCode}';
 }
