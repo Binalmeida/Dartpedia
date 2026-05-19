@@ -6,7 +6,7 @@
 library dartpedia_cli;
 
 import 'dart:convert';
-import 'dart:io'; // Importação necessária para corrigir o erro do 'stdin'
+import 'dart:io';
 import 'package:http/http.dart' as http;
 
 const version = '0.0.8';
@@ -30,7 +30,6 @@ Future<void> searchWikipedia(List<String>? arguments) async {
   if (arguments == null || arguments.isEmpty) {
     print('Por favor, informe o título de um artigo.');
     stdout.write('> ');
-    // Correção do stdin: agora ele funcionará pois importamos o 'dart:io' acima
     articleTitle = stdin.readLineSync() ?? '';
 
     if (articleTitle.isEmpty) {
