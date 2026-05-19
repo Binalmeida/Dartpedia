@@ -1,11 +1,12 @@
 /// Dartpedia CLI
+/// 
 /// Esta é a primeira versão da lição 4 feita por Guilherme Monteiro.
 /// Projeto desenvolvido para consumir a API da Wikipedia e gerenciar 
 /// argumentos através da linha de comando.
-library dartpedia_cli; // Ajustado para evitar erros de sintaxe com o 'library;' isolado
+library dartpedia_cli;
 
 import 'dart:convert';
-import 'dart:io';
+import 'dart:io'; // Importação necessária para corrigir o erro do 'stdin'
 import 'package:http/http.dart' as http;
 
 const version = '0.0.8';
@@ -24,26 +25,26 @@ Future<void> main(List<String> arguments) async {
 }
 
 Future<void> searchWikipedia(List<String>? arguments) async {
-  final String query;
+  String articleTitle;
 
   if (arguments == null || arguments.isEmpty) {
     print('Por favor, informe o título de um artigo.');
     stdout.write('> ');
-    final inputFromStdin = stdin.readLineSync();
+    // Correção do stdin: agora ele funcionará pois importamos o 'dart:io' acima
+    articleTitle = stdin.readLineSync() ?? '';
 
-    if (inputFromStdin == null || inputFromStdin.isEmpty) {
+    if (articleTitle.isEmpty) {
       print('Erro: Nenhum termo de busca foi informado. Encerrando.');
       return;
     }
-    query = inputFromStdin;
   } else {
-    query = arguments.join(' ');
+    articleTitle = arguments.join(' ');
   }
 
-  print('Iniciando busca na Wikipedia por: "$query"... Please wait.');
+  print('Iniciando busca na Wikipedia por: "$articleTitle"... Please wait.');
 
   try {
-    final result = await getWikipediaArticle(query);
+    final result = await getWikipediaArticle(articleTitle);
 
     if (result.startsWith('Error:')) {
       print(result);
@@ -51,7 +52,7 @@ Future<void> searchWikipedia(List<String>? arguments) async {
     }
 
     final data = jsonDecode(result);
-    final title = data['title'] ?? query;
+    final title = data['title'] ?? articleTitle;
     final extract = data['extract'] ?? 'Nenhum resumo disponível.';
 
     print('\n========================================');
