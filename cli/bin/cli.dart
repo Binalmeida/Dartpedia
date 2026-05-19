@@ -1,5 +1,3 @@
-import 'dart:convert'; 
-import 'package:http/http.dart' as http; 
 
 const version = '0.0.8';
 
