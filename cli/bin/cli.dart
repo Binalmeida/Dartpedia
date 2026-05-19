@@ -44,6 +44,36 @@ Future<void> searchWikipedia(List<String>? arguments) async {
     print('========================================\n');
   } catch (e) {
     print('Ocorreu um erro: $e');
+  print('Iniciando busca na Wikipedia por: "$query"...');
+
+  // URL da API do MediaWiki (Wikipedia) configurada para retornar o resumo em português
+  final url = Uri.parse(
+    'https://pt.wikipedia.org/api/rest_v1/page/summary/${Uri.encodeComponent(query)}'
+  );
+
+  try {
+    // Realiza a requisição HTTP GET
+    final response = await http.get(url);
+
+    if (response.statusCode == 200) {
+     
+      final data = jsonDecode(utf8.decode(response.bodyBytes));
+     
+      final title = data['title'] ?? query;
+      final extract = data['extract'] ?? 'Nenhum resumo disponível.';
+
+      print('\n========================================');
+      print('Título: $title');
+      print('========================================');
+      print(extract);
+      print('========================================\n');
+    } else if (response.statusCode == 404) {
+      print('Erro: O artigo "$query" não foi encontrado na Wikipedia.');
+    } else {
+      print('Erro na requisição: Código de status ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Ocorreu um erro ao se conectar à API: $e');
   }
 }
 
