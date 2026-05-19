@@ -1,5 +1,4 @@
 /// Dartpedia CLI
-/// 
 /// Esta é a primeira versão da lição 4 feita por Guilherme Monteiro.
 /// Projeto desenvolvido para consumir a API da Wikipedia e gerenciar 
 /// argumentos através da linha de comando.
