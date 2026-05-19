@@ -1,22 +1,21 @@
+/// Dartpedia CLI
+/// Esta é a primeira versão da lição 4 feita por Guilherme Monteiro.
+/// Projeto desenvolvido para consumir a API da Wikipedia e gerenciar 
+/// argumentos através da linha de comando.
+library;
+
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
 const version = '0.0.8';
 
-void main(List<String> arguments) {
 Future<void> main(List<String> arguments) async {
   if (arguments.isEmpty || arguments.first == 'help') {
     printUsage();
   } else if (arguments.first == 'version') {
     print('Dartpedia CLI version $version');
-  } else if (arguments.first == 'wikipedia') {
-    final inputArgs = arguments.length > 1
-        ? arguments.sublist(1)
-        : null;
-
-    searchWikipedia(inputArgs);
-  } else if (arguments.first == 'search') {
+  } else if (arguments.first == 'wikipedia' || arguments.first == 'search') {
     final inputArgs = arguments.length > 1 ? arguments.sublist(1) : null;
     await searchWikipedia(inputArgs);
   } else {
@@ -24,45 +23,34 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
-void searchWikipedia(List<String>? arguments) async {
-  final String articleTitle;
+Future<void> searchWikipedia(List<String>? arguments) async {
+  final String query;
 
   if (arguments == null || arguments.isEmpty) {
-    print('Please provide an article title.');
+    print('Por favor, informe o título de um artigo.');
+    stdout.write('> ');
     final inputFromStdin = stdin.readLineSync();
 
     if (inputFromStdin == null || inputFromStdin.isEmpty) {
-      print('No article title provided. Exiting.');
+      print('Erro: Nenhum termo de busca foi informado. Encerrando.');
+      return;
+    }
+    query = inputFromStdin;
+  } else {
+    query = arguments.join(' ');
+  }
+
+  print('Iniciando busca na Wikipedia por: "$query"... Please wait.');
+
+  try {
+    final result = await getWikipediaArticle(query);
+
+    if (result.startsWith('Error:')) {
+      print(result);
       return;
     }
 
-    articleTitle = inputFromStdin;
-  } else {
-    articleTitle = arguments.join(' ');
-  }
-
-  print('Looking up articles about "$articleTitle". Please wait.');
-
-  var articleContent = await getWikipediaArticle(articleTitle);
-
-  print(articleContent);
-Future<void> searchWikipedia(List<String>? arguments) async {
-  if (arguments == null || arguments.isEmpty) {
-    print('Erro: Nenhum termo de busca foi informado.');
-    return;
-  }
-
-  final query = arguments.join(' ');
-
-  print('Iniciando busca na Wikipedia por: "$query"...');
-
-  try {
-    // Chama a nova função
-    final result = await getWikipediaArticle(query);
-
-    // Converte o JSON retornado em Map
     final data = jsonDecode(result);
-
     final title = data['title'] ?? query;
     final extract = data['extract'] ?? 'Nenhum resumo disponível.';
 
@@ -72,68 +60,32 @@ Future<void> searchWikipedia(List<String>? arguments) async {
     print(extract);
     print('========================================\n');
   } catch (e) {
-    print('Ocorreu um erro: $e');
-  print('Iniciando busca na Wikipedia por: "$query"...');
+    print('Ocorreu um erro ao processar os dados: $e');
+  }
+}
 
-  // URL da API do MediaWiki (Wikipedia) configurada para retornar o resumo em português
+Future<String> getWikipediaArticle(String articleTitle) async {
   final url = Uri.parse(
-    'https://pt.wikipedia.org/api/rest_v1/page/summary/${Uri.encodeComponent(query)}'
+    'https://pt.wikipedia.org/api/rest_v1/page/summary/${Uri.encodeComponent(articleTitle)}'
   );
 
   try {
-    // Realiza a requisição HTTP GET
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
-     
-      final data = jsonDecode(utf8.decode(response.bodyBytes));
-     
-      final title = data['title'] ?? query;
-      final extract = data['extract'] ?? 'Nenhum resumo disponível.';
-
-      print('\n========================================');
-      print('Título: $title');
-      print('========================================');
-      print(extract);
-      print('========================================\n');
+      return utf8.decode(response.bodyBytes);
     } else if (response.statusCode == 404) {
-      print('Erro: O artigo "$query" não foi encontrado na Wikipedia.');
+      return 'Error: O artigo "$articleTitle" não foi encontrado na Wikipedia.';
     } else {
-      print('Erro na requisição: Código de status ${response.statusCode}');
+      return 'Error: Failed to fetch article "$articleTitle". Status code: ${response.statusCode}';
     }
   } catch (e) {
-    print('Ocorreu um erro ao se conectar à API: $e');
+    return 'Error: Ocorreu um erro ao se conectar à API: $e';
   }
 }
 
 void printUsage() {
   print(
-    "The following commands are valid: 'help', 'version', 'wikipedia <ARTICLE-TITLE>'",
+    "The following commands are valid: 'help', 'version', 'search <ARTICLE-TITLE>', 'wikipedia <ARTICLE-TITLE>'",
   );
-}
-
-    "The following commands are valid: 'help', 'version', 'search <ARTICLE-TITLE>'",
-  );
-}
-
-// Nova função solicitada
-Future<String> getWikipediaArticle(String articleTitle) async {
-  final url = Uri.https(
-    'en.wikipedia.org',
-    '/api/rest_v1/page/summary/$articleTitle',
-  );
-
-  final response = await http.get(url);
-
-  if (response.statusCode == 200) {
-    return response.body;
-  }
-
-
-  if (response.statusCode == 200) {
-    return response.body;
-  }
-
-  return 'Error: Failed to fetch article "$articleTitle". '
-      'Status code: ${response.statusCode}';
 }
