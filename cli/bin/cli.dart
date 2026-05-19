@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
-const version = '0.0.8';
+const version = '0.0.12';
 
 void main(List<String> arguments) {
 Future<void> main(List<String> arguments) async {
