@@ -1,3 +1,6 @@
+import 'dart:io';
+import 'package:http/http.dart' as http;
+
 const String version = '0.0.8';
 
 Future<void> runCommands(List<String> arguments) async {
@@ -8,7 +11,6 @@ Future<void> runCommands(List<String> arguments) async {
   } else if (arguments.first == 'search') {
     final inputArgs = arguments.length > 1 ? arguments.sublist(1) : null;
 
-   
     await searchWikipedia(inputArgs);
   } else {
     printUsage();
@@ -26,13 +28,11 @@ Future<void> searchWikipedia(List<String>? arguments) async {
     return;
   }
 
-   final query = arguments.join(' ');
+  final query = arguments.join(' ');
 
- 
   print('Resultado da busca para "$query":');
   print('- Página encontrada: $query (simulado)');
 }
-
 
 void printUsage() {
   print(
@@ -40,7 +40,11 @@ void printUsage() {
   );
 }
 
-
+// Task 3: Implementar função assíncrona para buscar artigo da Wikipedia
+Future<String> getWikipediaArticle(String articleTitle) async {
+  // Você adicionará mais código aqui em breve
+  return 'Artigo encontrado: $articleTitle';
+}
 
 /// Função main que o Dart executa ao rodar a CLI
 Future<void> main(List<String> arguments) async {
