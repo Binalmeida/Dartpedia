@@ -17,6 +17,30 @@ Future<void> main(List<String> arguments) async {
   }
 }
 
+void searchWikipedia(List<String>? arguments) async {
+  final String articleTitle;
+
+  if (arguments == null || arguments.isEmpty) {
+    print('Please provide an article title.');
+    final inputFromStdin = stdin.readLineSync(); 
+    
+    if (inputFromStdin == null || inputFromStdin.isEmpty) {
+      print('No article title provided. Exiting.');
+      return;
+    }
+    articleTitle = inputFromStdin;
+  } else {
+    
+    articleTitle = arguments.join(' ');
+  }
+
+  print('Looking up articles about "$articleTitle". Please wait.');
+
+
+  var articleContent = await getWikipediaArticle(articleTitle);
+  
+
+  print(articleContent);
 Future<void> searchWikipedia(List<String>? arguments) async {
   if (arguments == null || arguments.isEmpty) {
     print('Erro: Nenhum termo de busca foi informado.');
