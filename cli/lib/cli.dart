@@ -41,6 +41,34 @@ void searchWikipedia(List<String>? arguments) async {
   
 
   print(articleContent);
+Future<void> searchWikipedia(List<String>? arguments) async {
+  if (arguments == null || arguments.isEmpty) {
+    print('Erro: Nenhum termo de busca foi informado.');
+    return;
+  }
+
+  final query = arguments.join(' ');
+
+  print('Iniciando busca na Wikipedia por: "$query"...');
+
+  try {
+    // Chama a nova função
+    final result = await getWikipediaArticle(query);
+
+    // Converte o JSON retornado em Map
+    final data = jsonDecode(result);
+
+    final title = data['title'] ?? query;
+    final extract = data['extract'] ?? 'Nenhum resumo disponível.';
+
+    print('\n========================================');
+    print('Título: $title');
+    print('========================================');
+    print(extract);
+    print('========================================\n');
+  } catch (e) {
+    print('Ocorreu um erro: $e');
+  }
 }
 
 void printUsage() {
@@ -49,6 +77,7 @@ void printUsage() {
   );
 }
 
+// Nova função solicitada
 Future<String> getWikipediaArticle(String articleTitle) async {
   final url = Uri.https(
     'en.wikipedia.org',
