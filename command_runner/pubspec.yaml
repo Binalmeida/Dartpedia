@@ -1,0 +1,13 @@
+name: command_runner
+description: A simple command runner for CLI applications.
+version: 0.0.1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  # não precisa de nada por enquanto
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.25.0
