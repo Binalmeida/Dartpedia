@@ -18,6 +18,8 @@ Certifique-se de ter o **Dart SDK** instalado em sua máquina.
 No terminal, navegue até a pasta do projeto e execute:
 
 ```bash
+cd cli
+cd bin
 dart run bin/cli.dart wikipedia Computer_programming
 
 
