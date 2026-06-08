@@ -19,7 +19,6 @@ No terminal, navegue até a pasta do projeto e execute:
 
 ```bash
 cd cli
-cd bin
 dart run bin/cli.dart wikipedia Computer_programming
 
 
