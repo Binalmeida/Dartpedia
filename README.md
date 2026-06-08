@@ -18,42 +18,16 @@ Certifique-se de ter o **Dart SDK** instalado em sua máquina.
 No terminal, navegue até a pasta do projeto e execute:
 
 ```bash
-dart run
-```
+dart run bin/cli.dart wikipedia Computer_programming
 
-Ou execute um comando específico passando argumentos:
-
-```bash
 
 ```
 
-## Exemplos de Uso
 
-### Exibir a versão do aplicativo
+Exemplo de saída esperada
+CommandRunner received arguments: [wikipedia, Computer_programming]
 
-```bash
-dart run version
-```
 
-Saída esperada:
-
-```text
-0.8.0
-```
-
-### Exibir ajuda
-
-```bash
-dart run help
-```
-
-Exemplo de saída:
-
-```text
-Lista de comandos disponíveis:
-- help
-- version
-```
 
 ## Estrutura Principal do Código
 
