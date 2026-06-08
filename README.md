@@ -24,10 +24,11 @@ dart run bin/cli.dart wikipedia Computer_programming
 
 ```
 
-
 Exemplo de saída esperada
-CommandRunner received arguments: [wikipedia, Computer_programming]
 
+``` bash
+CommandRunner received arguments: [wikipedia, Computer_programming]
+```
 
 
 ## Estrutura Principal do Código
