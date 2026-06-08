@@ -2,10 +2,10 @@
 
 ## Integrantes da Equipe
 
-Guilherme Monteiro
-Bianca
-Isaac
-Giulia
+* Guilherme Monteiro Lima
+* Bianca de oliveira almeida
+* Isaac gonçalves da silva lima
+* Giulia bittencourt de souza silva
 
 ## Sobre o Projeto
 
